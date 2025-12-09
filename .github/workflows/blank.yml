@@ -1,0 +1,60 @@
+name: update
+
+permissions:
+  contents: write  # allow the workflow to commit CSV changes
+
+on:
+  workflow_dispatch:      # manual run button in GitHub UI
+  schedule:
+    - cron: '0 */2 * * *'   # run every 2 hours
+
+jobs:
+  daily:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out this repo
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.11'
+
+      - name: Install Python packages
+        run: |
+          pip install jupyter nbconvert requests pandas
+
+      - name: Debug notebook file
+        run: |
+          echo "Working directory:"
+          pwd
+          echo "Files in repo:"
+          ls -l
+          echo "Notebook details:"
+          ls -l cheapshark-update.ipynb || echo "Notebook not found"
+          echo "Size in bytes:"
+          wc -c cheapshark-update.ipynb || echo "wc failed"
+          echo "First 200 characters:"
+          python - << 'PY'
+          from pathlib import Path
+          p = Path("cheapshark-update.ipynb")
+          if not p.exists():
+              print("cheapshark-update.ipynb does not exist")
+          else:
+              data = p.read_text(encoding="utf-8")
+              print(data[:200])
+          PY
+
+      - name: Run notebook to update CSV
+        run: |
+          jupyter nbconvert --execute --to notebook cheapshark-update.ipynb --inplace
+
+      - name: Commit and push any changes
+        run: |
+          git config user.name "Automated"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          timestamp=$(date -u)
+          git commit -m "Latest data: ${timestamp}" || exit 0
+          git push
