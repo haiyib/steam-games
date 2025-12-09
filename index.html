@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Steam Sales Monitor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Favicon: 👾 -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' x='.1em' font-size='90'%3E👾%3C/text%3E%3C/svg%3E">
+
+    <!-- Merriweather for main title -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            background-color: rgb(255, 255, 255);
+            /* Datawrapper-style sans-serif for everything by default */
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+        /* Centered content */
+        .container {
+            width: 900px;
+            max-width: 100%;
+            margin: 4em auto;
+            padding: 0 1em;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.4em;
+            margin: 1.5em 0 0.5em;
+            /* Only the main title uses Merriweather */
+            font-family: "Merriweather", "Times New Roman", Times, serif;
+        }
+
+        h3 {
+            text-align: center;
+            font-weight: normal;
+            color: #555;
+            margin-top: 0;
+            /* inherits Helvetica from body; no font-family override needed */
+        }
+
+        /* 小标题（第二个图上面用） */
+        h2 {
+            font-size: 1.6em;
+            margin: 3em 0 0.5em;
+            font-weight: 600;
+        }
+
+        p {
+            color: #444;
+            line-height: 1.5;
+        }
+
+        /* Card that holds the chart */
+        .chart-card {
+            max-width: 900px;
+            margin: 2em auto;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.07);
+            padding: 1.5em 1em;
+        }
+
+        .chart-card h4 {
+            margin: 0 0 0.5em;
+            font-weight: 600;
+            text-align: center;
+            /* also inherits Helvetica from body */
+        }
+
+        .chart-card p {
+            font-size: 0.9em;
+            text-align: center;
+            margin-bottom: 1em;
+            color: #666;
+        }
+
+        /* Make iframe responsive inside the card */
+        .chart-wrapper {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .chart-wrapper iframe {
+            width: 100% !important;   /* fill the card but not the whole page */
+            border: none;
+        }
+
+        #footer {
+            text-align: center;
+            padding: 4em 1em;
+            background-color: #f0f1ff;
+            border-top: solid white 5px;
+            font-size: 0.9em;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Steam Sales Monitor 👾</h1>
+        <h3>A look at how Steam sale discounts relate to deal ratings</h3>
+        <p>
+            This page embeds an interactive Datawrapper scatter plot showing Steam game deals.
+            Hover over the points to see game titles and deal details.
+        </p>
+        <!-- 当前日期时间 -->
+        <p id="current-datetime"></p>
+
+        <!-- 第一个图：散点图 -->
+        <div class="chart-wrapper">
+            <!-- Your Datawrapper scatter plot -->
+            <iframe
+                title="Steam Game Deals: How Much You Save vs. How Good the Deal Is"
+                aria-label="Scatter Plot"
+                id="datawrapper-chart-YapCM"
+                src="https://datawrapper.dwcdn.net/YapCM/1/"
+                scrolling="no"
+                frameborder="0"
+                style="width: 0; min-width: 100% !important; border: none;"
+                height="932"
+                data-external="1">
+            </iframe>
+        </div>
+
+        <!-- 第二个图：range plot（普通价 vs 折后价） -->
+        <h2>Normal vs. sale price for top Steam deals</h2>
+        <p>
+            This range plot compares each game's regular price with its current sale price
+            for a selection of the best-rated Steam deals.
+        </p>
+
+        <div class="chart-wrapper">
+            <!-- Second Datawrapper chart: replace ABCD1 with your own chart ID -->
+            <iframe
+                title="Steam Deals: Normal vs Sale Price (Top 20)"
+                aria-label="Range Plot"
+                id="datawrapper-chart-ABCD1"
+                src="https://datawrapper.dwcdn.net/ABCD1/1/"
+                scrolling="no"
+                frameborder="0"
+                style="width: 0; min-width: 100% !important; border: none;"
+                height="600"
+                data-external="1">
+            </iframe>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="text/javascript">
+        // 设置当前日期时间
+        document.addEventListener("DOMContentLoaded", function () {
+            var dtElem = document.getElementById("current-datetime");
+            if (dtElem) {
+                var now = new Date();
+                var formatted = now.toLocaleString("en-US", {
+                    year: "numeric",
+                    month: "numeric",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "2-digit",
+                    second: "2-digit",
+                    hour12: true
+                });
+                dtElem.textContent = "Date: " + formatted;
+            }
+        });
+
+        // Datawrapper auto-resize script（原样保留）
+        window.addEventListener("message", function(a) {
+            if (void 0 !== a.data["datawrapper-height"]) {
+                var iframes = document.querySelectorAll("iframe");
+                for (var key in a.data["datawrapper-height"]) {
+                    for (var i = 0; i < iframes.length; i++) {
+                        var iframe = iframes[i];
+                        if (iframe.contentWindow === a.source) {
+                            iframe.style.height = a.data["datawrapper-height"][key] + "px";
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+
