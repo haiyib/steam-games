@@ -87,34 +87,20 @@
 
         <!-- Intro paragraph for the whole page -->
         <p>
-            Today, you suddenly want to find a game to play on Steam. But you don't have much money. 
+            Today, you suddenly want to find a game to play on Steam. But you don't have much money. <br>
             So, after a quick glance at your bank account, you opened up your Steam store, taking a look at the discount page. 
-            It is ALWAYS free games like "Counter-Strike 2", "PUBG: BATTLEGROUNDS" on the top of the list.
+            It is ALWAYS free games like "Counter-Strike 2", "PUBG: BATTLEGROUNDS" on the top of the list.<br>
             Dang it! What can I do?? I can't find what game I want to buy!
         </p>
 
         <p>
-            This page uses real Steam deal data to help answer that question. The first chart shows every discounted game as a dot, with its release year on the x-axis and its sale price on the y-axis, so you can see how cheap older and newer games actually get during sales. The second chart zooms in on the top 20 deals by deal rating and draws a line from each game’s normal price to its sale price — the longer the line, the bigger the discount. Together, these charts give you a quick map of the Steam sale landscape, so you can spot games that are not only cheap, but also genuinely good deals.
-
-        </p>
+            This page uses real Steam deal data to help answer that question. <br>
+            The first chart shows the top 20 deals by deal rating, and draws a line from each game’s normal price to its sale price — the longer the line, the bigger the discount. <br>
+            The second chart have every discounted game as a dot, with its release year on the x-axis and its sale price on the y-axis, so you can see how cheap older and newer games actually get during sales. <br>
+            This page updates by every two hours.
 
         <!-- Current date and time will be inserted here by JavaScript -->
         <p id="current-datetime"></p>
-
-        <!-- First chart: scatter plot -->
-        <div class="chart-wrapper">
-            <iframe
-                title="Steam Game Deals: How Much You Save vs. How Good the Deal Is"
-                aria-label="Scatter Plot"
-                id="datawrapper-chart-YapCM"
-                src="https://datawrapper.dwcdn.net/YapCM/1/"
-                scrolling="no"
-                frameborder="0"
-                style="width: 0; min-width: 100% !important; border: none;"
-                height="932"
-                data-external="1">
-            </iframe>
-        </div>
 
         <!-- Second chart: range plot (normal price vs sale price, top 20 games) -->
         <h2>Top 20 Games on Steam by Deal Rating</h2>
@@ -135,6 +121,21 @@
                 frameborder="0"
                 style="width: 0; min-width: 100% !important; border: none;"
                 height="420"
+                data-external="1">
+            </iframe>
+        </div>
+
+        <!-- First chart: scatter plot -->
+        <div class="chart-wrapper">
+            <iframe
+                title="Steam Game Deals: How Much You Save vs. How Good the Deal Is"
+                aria-label="Scatter Plot"
+                id="datawrapper-chart-YapCM"
+                src="https://datawrapper.dwcdn.net/YapCM/1/"
+                scrolling="no"
+                frameborder="0"
+                style="width: 0; min-width: 100% !important; border: none;"
+                height="932"
                 data-external="1">
             </iframe>
         </div>
@@ -177,4 +178,3 @@
     </script>
 </body>
 </html>
-
