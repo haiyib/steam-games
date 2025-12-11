@@ -44,10 +44,10 @@
             margin-top: 0;
         }
 
-        /* Subheading above the second chart */
+        /* Subheading above charts (if needed later) */
         h2 {
             font-size: 1.6em;
-            margin: 4em 0 0.5em; /* extra top margin to add space before second chart */
+            margin: 4em 0 0.5em;
             font-weight: 600;
             color: #ffffff;
         }
@@ -99,10 +99,12 @@
             The first chart shows the top 20 deals by deal rating, and draws a line from each game’s normal price to its sale price. <br>
             The second chart have every discounted game as a dot, with its release year on the x-axis and its sale price on the y-axis, so you can see how cheap older and newer games actually get during sales. <br>
             This page updates by every two hours.
+        </p>
 
         <!-- Current date and time will be inserted here by JavaScript -->
         <p id="current-datetime"></p>
 
+        <!-- First chart: range plot (top 20 deals) -->
         <div class="chart-wrapper">
             <iframe
                 title="Top 20 Games on Steam By Deal Rating"
@@ -117,17 +119,17 @@
             </iframe>
         </div>
 
-        <!-- Second chart: scatter plot -->
+        <!-- Second chart: scatter plot (every discounted game, by release year) -->
         <div class="chart-wrapper">
             <iframe
-                title="Steam Game Deals: How Much You Save vs. How Good the Deal Is"
+                title="Every discounted game, by release year"
                 aria-label="Scatter Plot"
-                id="datawrapper-chart-YapCM"
-                src="https://datawrapper.dwcdn.net/YapCM/1/"
+                id="datawrapper-chart-na0jF"
+                src="https://datawrapper.dwcdn.net/na0jF/2/"
                 scrolling="no"
                 frameborder="0"
                 style="width: 0; min-width: 100% !important; border: none;"
-                height="932"
+                height="691"
                 data-external="1">
             </iframe>
         </div>
@@ -170,3 +172,4 @@
     </script>
 </body>
 </html>
+
