@@ -83,33 +83,25 @@
 <body>
     <div class="container">
         <h1>🎮 Steam Sales Monitor 👾</h1>
-        <h3>Having a hard time choosing what game you should buy when it's on sale? This page might be helpful for you.</h3>
+        <h3>Having a hard time choosing what game you should buy when it's on sale? <br>
+            This page might be helpful for you.</h3>
 
         <!-- Intro paragraph for the whole page -->
         <p>
             Today, you suddenly want to find a game to play on Steam. But you don't have much money. <br>
-            So, after a quick glance at your bank account, you opened up your Steam store, taking a look at the discount page. 
+            So, after a quick glance at your bank account, you opened up your Steam store, taking a look at the discount page. <br>
             It is ALWAYS free games like "Counter-Strike 2", "PUBG: BATTLEGROUNDS" on the top of the list.<br>
             Dang it! What can I do?? I can't find what game I want to buy!
         </p>
 
         <p>
             This page uses real Steam deal data to help answer that question. <br>
-            The first chart shows the top 20 deals by deal rating, and draws a line from each game’s normal price to its sale price — the longer the line, the bigger the discount. <br>
+            The first chart shows the top 20 deals by deal rating, and draws a line from each game’s normal price to its sale price. <br>
             The second chart have every discounted game as a dot, with its release year on the x-axis and its sale price on the y-axis, so you can see how cheap older and newer games actually get during sales. <br>
             This page updates by every two hours.
 
         <!-- Current date and time will be inserted here by JavaScript -->
         <p id="current-datetime"></p>
-
-        <!-- Second chart: range plot (normal price vs sale price, top 20 games) -->
-        <h2>Top 20 Games on Steam by Deal Rating</h2>
-
-        <!-- Paragraph describing the second chart -->
-        <p>
-            This range plot shows the 20 highest-rated Steam deals. Each line compares a game's
-            normal price to its current sale price, so longer lines indicate deeper discounts.
-        </p>
 
         <div class="chart-wrapper">
             <iframe
