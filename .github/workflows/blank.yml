@@ -14,41 +14,47 @@ jobs:
 
     steps:
       - name: Check out this repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.13'
 
       - name: Install Python packages
         run: |
           pip install jupyter nbconvert requests pandas
 
-      - name: Debug notebook file
+      - name: Check the notebook is intact
         run: |
-          echo "Working directory:"
-          pwd
-          echo "Files in repo:"
-          ls -l
-          echo "Notebook details:"
-          ls -l cheapshark-update.ipynb || echo "Notebook not found"
-          echo "Size in bytes:"
-          wc -c cheapshark-update.ipynb || echo "wc failed"
-          echo "First 200 characters:"
+          # Catch unresolved merge/stash conflict markers, which have been
+          # committed before and make the notebook invalid JSON.
+          if grep -nE '^(<<<<<<<|>>>>>>>)' cheapshark-update.ipynb; then
+            echo "::error::cheapshark-update.ipynb contains unresolved conflict markers."
+            exit 1
+          fi
           python - << 'PY'
+          import json, sys
           from pathlib import Path
           p = Path("cheapshark-update.ipynb")
           if not p.exists():
-              print("cheapshark-update.ipynb does not exist")
-          else:
-              data = p.read_text(encoding="utf-8")
-              print(data[:200])
+              sys.exit("::error::cheapshark-update.ipynb not found")
+          try:
+              nb = json.loads(p.read_text(encoding="utf-8"))
+          except json.JSONDecodeError as e:
+              sys.exit(f"::error::notebook is not valid JSON: {e}")
+          print(f"OK: {len(nb['cells'])} cells, nbformat {nb['nbformat']}")
           PY
 
       - name: Run notebook to update CSV
         run: |
-          jupyter nbconvert --execute --to notebook cheapshark-update.ipynb --inplace
+          # Write the executed copy outside the repo so the notebook in git is
+          # never rewritten by CI. The notebook is source; the CSVs are output.
+          # The generous timeout matters: cell 1 makes 30 sequential API calls,
+          # and nbconvert's default is only 30s per cell.
+          jupyter nbconvert --execute --to notebook cheapshark-update.ipynb \
+            --output-dir /tmp --output executed.ipynb \
+            --ExecutePreprocessor.timeout=900
 
       - name: Show top20 CSV preview
         run: |
@@ -60,7 +66,13 @@ jobs:
         run: |
           git config user.name "Automated"
           git config user.email "actions@users.noreply.github.com"
-          git add -A
+          # Only the generated CSVs — never the notebook. Committing the
+          # notebook made CI's kernel metadata fight the local kernel's and
+          # produced a merge conflict on every pull.
+          git add cheapshark_updated.csv steam_deals_top20_rangeplot.csv
+          git diff --cached --quiet && echo "No data changes." && exit 0
           timestamp=$(date -u)
-          git commit -m "Latest data: ${timestamp}" || exit 0
+          git commit -m "Latest data: ${timestamp}"
+          # Rebase in case a human pushed while this run was executing
+          git pull --rebase --autostash origin main
           git push
